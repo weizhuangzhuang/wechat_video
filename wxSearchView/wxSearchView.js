@@ -98,9 +98,9 @@ function wxSearchKeyTap(e) {
 // 确任或者回车
 function wxSearchConfirm(e) {
   var key = e.target.dataset.key;
-  if(key=='back'){
+  if (key == 'back') {
     __goBackFunction();
-  }else{
+  } else {
     search(__that.data.wxSearchData.value);
   }
 }
