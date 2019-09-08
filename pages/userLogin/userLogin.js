@@ -6,8 +6,20 @@ Page({
    * 页面的初始数据
    */
   data: {
-    
+    redirectUrl: ''
   },
+
+  onLoad: function(params){
+
+    var redirectUrl = params.redirectUrl
+    //debugger;
+    redirectUrl = redirectUrl.replace(/#/g, "?")
+    redirectUrl = redirectUrl.replace(/@/g, "=")
+    this.setData({
+      redirectUrl: redirectUrl
+    })
+  },
+
   doLogin : function(e){
     var that = this
     var formObject = e.detail.value
@@ -49,9 +61,16 @@ Page({
               //app.userInfo = res.data.data
               //fixme 修改原有的全局对象为本地缓存
               app.setGlobalUserInfo(res.data.data)
-              wx.redirectTo({
-                url: '../mine/mine',
-              })
+              var redirectUrl = that.data.redirectUrl
+              if(redirectUrl != null && redirectUrl != '' && redirectUrl != undefined){
+                wx.redirectTo({
+                  url: redirectUrl,
+                })
+              } else{
+                wx.redirectTo({
+                  url: '../mine/mine',
+                })
+              }
             }else if(status == 500){
               wx.showToast({
                 title: res.data.msg,
@@ -62,6 +81,12 @@ Page({
           }
         })
       }
-    }
+    },
+
+  goRegistPage: function () {
+    wx.redirectTo({
+      url: '../userRegist/userRegist',
+    })
+  }
   
 })

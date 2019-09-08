@@ -15,8 +15,8 @@ Page({
   onLoad: function(options) {
     var that = this
     var user = app.getGlobalUserInfo()
-    console.log("-------")
-    console.log(user)
+    //console.log("-------")
+    //console.log(user)
     var serverUrl = app.serverUrl
     wx.request({
       url: serverUrl + '/user/query?userId=' + user.id,
