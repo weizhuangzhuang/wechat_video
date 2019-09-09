@@ -64,7 +64,7 @@ Page({
       url: serverUrl + '/user/queryPubilsher?loginUserId=' + loginUserId + "&videoId=" + videoInfo.id + "&publishUserId=" + videoInfo.userId,
       method: 'POST',
       success: function(res) {
-        //console.log(res.data)
+        console.log(res.data)
         me.setData({
           publisher: res.data.data.publisher,
           userLikeVideo: res.data.data.userLikeVideo,
@@ -117,6 +117,7 @@ Page({
   showMine: function() {
     var user = app.getGlobalUserInfo();
 
+    //防止绕过验证直接访问后台
     if (user == null || user == undefined || user == "") {
       wx.navigateTo({
         url: '../userLogin/userLogin',
@@ -126,6 +127,47 @@ Page({
         url: '../mine/mine',
       })
     }
+  },
+
+  likeVideoOrNot: function() {
+    var me = this
+    var user = app.getGlobalUserInfo()
+
+    //防止绕过验证直接访问后台
+    if (user == null || user == undefined || user == "") {
+      wx.navigateTo({
+        url: '../userLogin/userLogin',
+      })
+    } else {
+      var userLikeVideo = me.data.userLikeVideo
+      var videoInfo = me.data.videoInfo
+      //debugger;
+      var url = '/video/userLike?userId=' + user.id + '&videoId=' + videoInfo.id + '&videoCreaterId=' + videoInfo.userId
+      if (userLikeVideo) {
+        var url = '/video/userUnLike?userId=' + user.id + '&videoId=' + videoInfo.id + '&videoCreaterId=' + videoInfo.userId
+      }
+      wx.showLoading({
+        title: '...',
+      })
+      wx.request({
+        url: app.serverUrl + url,
+        method: 'POST',
+        header: {
+          'content-type': 'application/json', // 默认值
+          'userId': user.id,
+          'userToken': user.userToken
+        },
+        success: function(res) {
+          wx.hideLoading()
+          me.setData({
+            userLikeVideo: !userLikeVideo
+          })
+        }
+      })
+    }
+
+
+
   }
 
 })

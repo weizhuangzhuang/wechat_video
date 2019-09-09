@@ -22,36 +22,37 @@ Page({
       url: serverUrl + '/user/query?userId=' + user.id,
       method: 'POST',
       header: {
-        'content-type': 'application/json' // 默认值
+        'content-type': 'application/json', // 默认值
+        'userId': user.id,
+        'userToken': user.userToken
       },
       success: function(res) {
-        console.log(res.data)
+        //console.log(res.data)
         wx.hideLoading()
-        var data = res.data.data
-        var faceUrl = "../resource/images/noneface.png"
-        if (data.faceImage != null && data.faceImage != "" && data.faceImage != undefined) {
-          faceUrl = serverUrl + data.faceImage
-        }
-        console.log(faceUrl)
-        that.setData({
-          faceUrl: faceUrl,
-          nickname: data.nickname,
-          fansCounts: data.fansCounts,
-          followCounts: data.followCounts,
-          receiveLikeCounts: data.receiveLikeCounts
-        })
-        var status = res.data.status
-        if (status == 200) {
-          wx.showToast({
-            title: '登录成功',
-            icon: 'none',
-            duration: 2000
+        if (res.data.status == 200) {
+          var data = res.data.data
+          var faceUrl = "../resource/images/noneface.png"
+          if (data.faceImage != null && data.faceImage != "" && data.faceImage != undefined) {
+            faceUrl = serverUrl + data.faceImage
+          }
+          //console.log(faceUrl)
+          that.setData({
+            faceUrl: faceUrl,
+            nickname: data.nickname,
+            fansCounts: data.fansCounts,
+            followCounts: data.followCounts,
+            receiveLikeCounts: data.receiveLikeCounts
           })
-        } else if (status == 500) {
+        } else if (res.data.status == 502) {
           wx.showToast({
             title: res.data.msg,
             icon: 'none',
-            duration: 2000
+            duration: 3000,
+            success: function() {
+              wx.redirectTo({
+                url: '../userLogin/userLogin',
+              })
+            }
           })
         }
       }

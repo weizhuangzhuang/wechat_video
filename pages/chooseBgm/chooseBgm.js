@@ -19,9 +19,15 @@ Page({
     })
     var that = this
     var serverUrl = app.serverUrl
+    var user = app.getGlobalUserInfo();
     wx.request({
       url: serverUrl + "/bgm/list",
       method: "GET",
+      header: {
+        'content-type': 'application/json', // 默认值
+        'headerUserId': user.id,
+        'headerUserToken': user.userToken
+      },
       success: function(res) {
         var bgmList = res.data.data
         console.log(bgmList)
@@ -31,6 +37,17 @@ Page({
             bgmList: bgmList,
             serverUrl: serverUrl
           })
+        } else if (res.data.status == 502) {
+          wx.showToast({
+            title: res.data.msg,
+            duration: 2000,
+            icon: "none",
+            success: function() {
+              wx.redirectTo({
+                url: '../userLogin/login',
+              })
+            }
+          });
         }
       }
     })
@@ -57,7 +74,7 @@ Page({
     wx.uploadFile({
       url: serverUrl + "/video/uploadVideo", //仅为示例，非真实的接口地址
       formData: {
-        userId: userInfo.id,   //fixme 原来的 app.userInfo.id
+        userId: userInfo.id, //fixme 原来的 app.userInfo.id
         bgmId: bgmId,
         desc: desc,
         videoSeconds: duration,
@@ -66,20 +83,22 @@ Page({
       },
       filePath: tempFilePath,
       name: 'file',
+      header: {
+        'content-type': 'application/json', // 默认值
+        'headerUserId': userInfo.id,
+        'headerUserToken': userInfo.userToken
+      },
       success(res) {
-        console.log(res)
-        console.log(res.data)
         const data = JSON.parse(res.data)
-        console.log(data)
         wx.hideLoading()
         if (data.status == 200) {
           wx.showToast({
             title: '上传成功！',
             icon: "success"
           });
-            wx.navigateBack({
-              delta: 1
-            })
+          wx.navigateBack({
+            delta: 1
+          })
           // //上传封面
           // wx.uploadFile({
           //   url: serverUrl + "/video/uploadCover", //仅为示例，非真实的接口地址
@@ -108,7 +127,16 @@ Page({
           //   }
           // })
 
-        } else if (data.status == 500) {
+        } else if (data.status == 502) {
+          wx.showToast({
+            title: res.data.msg,
+            duration: 2000,
+            icon: "none"
+          });
+          wx.redirectTo({
+            url: '../userLogin/login',
+          })
+        } else {
           wx.showToast({
             title: data.msg
           });

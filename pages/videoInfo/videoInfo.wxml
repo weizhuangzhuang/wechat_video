@@ -1,6 +1,6 @@
 <!--pages/videoInfo/videoInfo.wxml-->
 <view style="width:100%;;height:100%">
-  <video id="myVideo" src="{{src}}" muted="{{false}}" controls="{{true}}" autoplay="{{false}}" loop="{{flase}}" enable-progress-gesture="{{false}}" style='width:100%;height:100%;' objectFit='{{cover}}'>
+  <video id="myVideo" src="{{src}}" muted="{{true}}" controls="{{true}}" autoplay="{{false}}" loop="{{flase}}" enable-progress-gesture="{{false}}" style='width:100%;height:100%;' objectFit='{{cover}}'>
 
     <cover-view class='container'>
       <!-- 上传视频 -->
