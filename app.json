@@ -6,7 +6,8 @@
     "pages/userRegist/userRegist",
     "pages/chooseBgm/chooseBgm",
     "pages/userLogin/userLogin",
-    "pages/mine/mine"
+    "pages/mine/mine",
+    "pages/report/report"
   ],
   "window": {
     "backgroundTextStyle": "light",

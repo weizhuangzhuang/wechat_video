@@ -1,6 +1,6 @@
 <!--pages/videoInfo/videoInfo.wxml-->
 <view style="width:100%;;height:100%">
-  <video id="myVideo" src="{{src}}" muted="{{true}}" controls="{{true}}" autoplay="{{false}}" loop="{{flase}}" enable-progress-gesture="{{false}}" style='width:100%;height:100%;' objectFit='{{cover}}'>
+  <video id="myVideo" src="{{src}}" muted="{{true}}" controls="{{true}}" autoplay="{{false}}" loop="{{flase}}" enable-progress-gesture="{{true}}" enable-play-gesture = "{{true}}" style='width:100%;height:100%;' objectFit='{{cover}}'>
 
     <cover-view class='container'>
       <!-- 上传视频 -->
@@ -61,4 +61,37 @@
 
 
   </video>
+</view>
+
+
+<view>
+
+<view class="saySthView">
+<input name="commentContent" class="saySth" placeholder="{{placeholder}}" confirm-type="send" bindconfirm="saveComment" focus='{{commentFocus}}' value='{{contentValue}}'
+data-replyFatherCommentId='{{replyFatherCommentId}}'
+data-replyToUserId='{{replyToUserId}}'/>
+</view>
+
+  <block wx:for="{{commentsList}}">
+    <view class='comments-all' bindtap='replyFocus' data-fatherCommentId='{{item.id}}' data-toUserId='{{item.fromUserId}}' data-toNickname='{{item.nickname}}'>
+      <view class='container-comments'>
+        <image class="face-comments" src='{{serverUrl}}{{item.faceImage}}'></image>
+        <view class='nickname-comments'>
+          <label class='nickname-lbl'>@{{item.nickname}}</label>
+          于
+          <label class='date-lbl'>{{item.timeAgoStr}}</label>
+
+          <block wx:if="{{item.toNickname != null}}">
+            回复
+            <label class='nickname-lbl'>@{{item.toNickname}}</label>
+          </block>
+          <block wx:else>
+            留言：
+          </block>
+        </view>
+      </view>
+      <view class='comments-content'>{{item.comment}}</view>
+    </view>
+  </block>
+
 </view>

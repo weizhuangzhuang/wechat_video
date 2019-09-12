@@ -25,8 +25,8 @@ Page({
       method: "GET",
       header: {
         'content-type': 'application/json', // 默认值
-        'headerUserId': user.id,
-        'headerUserToken': user.userToken
+        'userId': user.id,
+        'userToken': user.userToken
       },
       success: function(res) {
         var bgmList = res.data.data
@@ -67,7 +67,6 @@ Page({
     var desc = e.detail.value.desc
     var that = this
     var userInfo = app.getGlobalUserInfo()
-    console.log(e.detail.value)
     wx.showLoading({
       title: '上传中....',
     })
@@ -85,8 +84,8 @@ Page({
       name: 'file',
       header: {
         'content-type': 'application/json', // 默认值
-        'headerUserId': userInfo.id,
-        'headerUserToken': userInfo.userToken
+        'userId': userInfo.id,
+        'userToken': userInfo.userToken
       },
       success(res) {
         const data = JSON.parse(res.data)
